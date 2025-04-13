@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4">Example Recipe</h1>
+{% if recipe %}
+  <h2 class="text-xl font-bold">{{ recipe.title }}</h2>
+  <h3 class="mt-2 font-semibold">Ingredients</h3>
+  <p>{{ recipe.ingredients }}</p>
+  <p><i class="fas fa-heart"></i> {{ recipe.like_count() }} likes</p>
+  <h3 class="mt-2 font-semibold">Steps</h3>
+  <ol class="list-decimal ml-5">
+    {% for step in recipe.steps.split('|') %}
+      <li class="mb-1">{{ step }}</li>
+    {% endfor %}
+  </ol>
+  <!-- Search page button -->
+  <div class="mt-6">
+    <a href="{{ url_for('main.dashboard') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Search for Recipes
+    </a>
+  </div>
+{% else %}
+  <p>No recipes in database yet. <a class="underline" href="{{ url_for('auth.login') }}">Log in</a> and add one!</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4">Find a Recipe</h1>
+<form method="post" class="flex mb-6">
+  <input type="text" name="ingredients" placeholder="e.g., chicken, rice" value="{{ query }}" class="flex-1 border p-2 rounded-l" required />
+  <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-6 py-2.5 rounded-r-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-300 ease-in-out">
+    <i class="fas fa-search mr-1"></i> Search
+  </button>
+</form>
+<div class="mb-8">
+  <div class="relative overflow-hidden rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 p-2">
+    <div class="popular-recipes-scroll">
+      {% for popular in popular_recipes %}
+        <a href="{{ url_for('main.dashboard') }}?recipe_id={{ popular.id }}" 
+           class="popular-recipe inline-block px-4 py-2 bg-white rounded-full shadow-sm hover:shadow-md hover:bg-blue-50 transition-all duration-200 mx-2">
+          <span class="font-medium text-sm">{{ popular.title }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% if recipes %}
+  <h2 class="text-xl font-bold mb-2">Recommendations</h2>
+  <div class="grid md:grid-cols-2 gap-4">
+    {% for r in recipes %}
+      <div class="bg-white p-4 rounded shadow">
+        <h3 class="font-semibold text-lg">{{ r.title }}</h3>
+        <p class="text-sm text-gray-600">{{ r.ingredients[:100] }}...</p>
+        <p class="text-sm text-gray-600"><i class="fas fa-heart text-red-500"></i> {{ r.like_count() }} likes</p>
+        <div class="mt-2 space-x-2">
+          <a href="{{ url_for('main.like', recipe_id=r.id) }}" class="underline">Like</a>
+          <a href="{{ url_for('main.save', recipe_id=r.id) }}" class="underline">Save</a>
+        </div>
+        <details class="mt-2">
+          <summary class="cursor-pointer text-blue-600">Steps</summary>
+          <ol class="list-decimal ml-5 mt-2">
+            {% for step in r.steps.split('|') %}
+              <li>{{ step }}</li>
+            {% endfor %}
+          </ol>
+        </details>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+<div class="flex items-center mt-8 gap-4">
+  <div class="w-16 h-16 md:w-24 md:h-24 flex-shrink-0">
+    <img src="{{ url_for('static', filename='images/chef.png') }}" alt="Recipe icon" 
+         class="w-full h-full object-contain">
+  </div>
+  <a href="{{ url_for('main.add_recipe') }}" 
+     class="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition duration-300 ease-in-out">
+    <i class="fas fa-plus-circle mr-2"></i>Add a new recipe
+  </a>
+</div>
+
+<style>
+  @keyframes scrollHorizontal {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+  
+  .popular-recipes-scroll {
+    display: inline-block;
+    white-space: nowrap;
+    padding: 0.5rem 0;
+    animation: scrollHorizontal 60s linear infinite; 
+  }
+  
+  /* Clone content for continuous scrolling effect */
+  .popular-recipes-scroll:after {
+    content: attr(data-content);
+    display: inline-block;
+  }
+  
+  /* Pause animation on hover */
+  .popular-recipes-scroll:hover {
+    animation-play-state: paused;
+  }
+  
+  /* Add enough content to enable scrolling */
+  .popular-recipes-scroll {
+    min-width: 100%;
+  }
+</style>
+
+  <script>
+    // Clone items for continuous scrolling
+    document.addEventListener('DOMContentLoaded', function() {
+      const scrollContainer = document.querySelector('.popular-recipes-scroll');
+      const content = scrollContainer.innerHTML;
+      scrollContainer.setAttribute('data-content', content);
+      scrollContainer.innerHTML = content + content;
+    });
+  </script>
+
+{% endblock %}
