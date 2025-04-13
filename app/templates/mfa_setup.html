@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h1 class="text-2xl font-semibold mb-4">MFA Setup</h1>
+
+  <p class="mb-4 text-sm text-gray-700">
+    Scan this QR code using your Google Authenticator or compatible app, then proceed to login.
+  </p>
+
+  <div class="flex justify-center mb-4">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ otp_uri }}" alt="QR Code">
+  </div>
+
+  <p class="text-sm text-gray-500 mb-2 break-all">Or manually enter: <br><code>{{ otp_uri }}</code></p>
+
+  <a href="{{ url_for('login') }}" class="inline-block mt-4 text-blue-500 underline text-sm">Continue to Login</a>
+{% endblock %}

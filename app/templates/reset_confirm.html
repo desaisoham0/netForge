@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h1 class="text-2xl font-semibold mb-4">Set a New Password</h1>
+
+  {% if message %}
+    <div class="text-red-500 text-sm mb-2">{{ message|safe }}</div>
+  {% endif %}
+
+  <form method="post" class="space-y-4">
+    <div class="relative">
+      <input type="password" name="password" id="password" placeholder="New Password" class="w-full border p-2 rounded pr-10" required />
+      <button type="button" onclick="togglePassword()" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">👁</button>
+    </div>
+
+    <div>
+      Strength: <span id="strength" class="font-semibold text-sm">Waiting...</span>
+    </div>
+
+    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded w-full">Update Password</button>
+  </form>
+
+  <script src="{{ url_for('static', filename='zxcvbn.js') }}"></script>
+  <script>
+    function togglePassword() {
+      const pw = document.getElementById("password");
+      pw.type = pw.type === "password" ? "text" : "password";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const passwordInput = document.getElementById("password");
+      const strengthEl = document.getElementById("strength");
+
+      passwordInput.addEventListener("input", function () {
+        const score = zxcvbn(this.value).score;
+        let msg = "";
+        let color = "";
+
+        if (score <= 1) {
+          msg = "Weak";
+          color = "text-red-500";
+        } else if (score === 2) {
+          msg = "Fair";
+          color = "text-yellow-500";
+        } else {
+          msg = "Strong";
+          color = "text-green-500";
+        }
+
+        strengthEl.textContent = msg;
+        strengthEl.className = "font-semibold text-sm " + color;
+      });
+    });
+  </script>
+{% endblock %}
