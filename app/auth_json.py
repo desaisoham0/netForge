@@ -8,7 +8,7 @@ from flask_limiter.util import get_remote_address
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.secret_key = 'supersecretkey'
 
 app.permanent_session_lifetime = timedelta(minutes=15)
