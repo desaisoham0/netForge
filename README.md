@@ -1,43 +1,79 @@
-# 🥘 Straggling Recipes
+# Recipe Vault
 
-**Straggling Recipes** is designed to help users figure out what to cook based on the ingredients they already have at home. It's often cheaper and more fulfilling than eating out — and with just a little effort, cooking can be fun and accessible for everyone.
+A web app for sharing, searching, and recommending recipes—built in 7 hours for a hackathon. Users can register, add and save recipes, like their favorites, and get ingredient-based recommendations powered by a machine learning model.
 
----
+**Team:**  
+- Soham Desai  
+- Karma Tenzin  
+- Ariel Gitman  
+- Eric Huang  
 
-## 📦 Features
+## 🚩 What It Does
 
-- ✅ Search for recipes based on ingredients users already have
-- ✅ MFA-secured user authentication to protect accounts
-- ✅ Like and save favorite recipes
-- ✅ Filter recipes by popularity and personal preferences
+- **Sign Up / Login with MFA:** Secure user accounts with password + TOTP (like Google Authenticator).
+- **Recipe Sharing:** Add new recipes with titles, ingredients, and steps.
+- **Like & Save:** Like recipes or save them to your profile for later.
+- **Smart Search:** Enter ingredients and get back recommended recipes using TF-IDF + cosine similarity.
+- **Dashboard:** View the most popular recipes (based on likes), and find what’s trending.
+- **Password Reset:** Reset account securely using MFA.
 
----
+## 🧑‍💻 Tech Stack
 
-## 🛠️ Tech Stack
+- **Python 3.10+**
+- **Flask** (web framework)
+- **Flask-Login** (user sessions)
+- **Flask-SQLAlchemy** (database ORM)
+- **scikit-learn** (recommendation engine)
+- **pandas** (data wrangling)
+- **pyotp** (multi-factor authentication)
+- **Werkzeug** (password hashing)
+- **Jinja2** (templates)
+- **HTML/CSS** (front end)
+- **python-dotenv** (config management)
 
-- **Backend:** Python 3.x, Flask  
-- **Frontend:** Tailwind CSS  
-- **Data Processing:** Pandas, NumPy
+## 🛠️ Key Features & Structure
 
----
+- **app.py:** App entry point, user auth, session logic, logging.
+- **/main:** Recipe dashboard, add/view/like/save recipes.
+- **/ml:** Simple ML recommender (TF-IDF + cosine similarity).
+- **/models:** User, Recipe, Like, Save database models.
+- **/templates:** Jinja2 HTML templates.
+- **/logs:** All app events logged here for security and debugging.
 
 ## 🚀 Getting Started
 
-### 1. Clone the Repository
+**1. Clone the repo**
 ```bash
 git clone https://github.com/desaisoham0/netForge
-cd straggling-recipes
+cd netForge
 ```
-
-### 2. Download Required Dependencies
+**2. Install dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run The App
-
+**3. Run the app**
 ```bash
 python app.py
 ```
 
+## 🔒 Security
 
+- MFA for login and password resets.
+- Session timeout and rate limiting for brute-force protection.
+- Passwords are hashed (never stored in plain text).
+- Logs all signups, logins, and sensitive actions.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
